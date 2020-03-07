@@ -3,8 +3,10 @@ name: REGoth GitHub CI
 on:
   push:
     branches: [ master ] #Everytime master branch is updated
+    paths: ['cmake/*', 'lib/*', 'src/*'] #only when these files are modifed
   pull_request:
     branches: [ master ] #for every pull request going to master
+    paths: ['cmake/*', 'lib/*', 'src/*'] #only when these files are modifed
 
 jobs:
   build: 
@@ -44,7 +46,7 @@ jobs:
         set -e
         sudo apt-get update
         sudo apt-get install apt-transport-https ca-certificates gnupg software-properties-common wget uuid-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev gcc-8 g++-8
-        wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add -
+        wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add - #newer cmake
         sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
         sudo apt-get update
         sudo apt-get install cmake
