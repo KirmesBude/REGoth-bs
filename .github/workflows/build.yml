@@ -51,19 +51,21 @@ jobs:
         sudo apt-get update
         sudo apt-get install cmake
     
-    - name: Setup cache folder structure
+    - name: Setup cache
       shell: bash
       run: |
         set -e
         rm -rf .cache
         mkdir -p ./.cache/bsf
+        bsf_status=$(echo $(git submodule status lib/bsf) | sed "s/ /-/g") #get submodule status and replace spaces with dashes
+        echo "::set-env name=BSF_COMMIT_ID::$bsf_status" #output as environment variable because I dont know any better way
     
     - name: Cache bsf
       uses: actions/cache@v1.1.2
       id: cache-bsf
       with:
         path: ./.cache/bsf
-        key: ${{ runner.os }}-bsf
+        key: ${{ runner.os }}-${{ env.BSF_COMMIT_ID }} #use os and bsf commit as cache key
         
     - name: Build bsf
       if: steps.cache-bsf.outputs.cache-hit != 'true'
